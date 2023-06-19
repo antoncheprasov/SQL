@@ -1,0 +1,54 @@
+// Вывести название и стоимость в USD одного самого дорогого проданного товара
+
+SELECT
+	Products.ProductName,
+  Products.Price * 1.06 AS Price_usd
+FROM Products
+
+JOIN OrderDetails ON Products.ProductID=OrderDetails.ProductID
+ORDER BY Price DESC
+LIMIT 1;
+
+
+// Вывести два самых дорогих товара из категории Beverages из USA
+
+SELECT * 
+FROM Products
+JOIN Categories ON Categories.CategoryID=Products.CategoryID
+WHERE
+	Categories.CategoryName='Beverages' AND Products.SupplierID IN (
+    SELECT SupplierID
+    FROM Suppliers
+    WHERE Country = 'USA'
+)
+ORDER BY Products.Price DESC
+LIMIT 2;
+
+// Вывести заказы, добавив поле доставлено (или нет), учитывая, что доставлены только 10248 и 10249
+SELECT *,
+      CASE
+    	WHEN OrderID IN (10248, 10249) THEN "Shipped"
+      ELSE "Not Shipped"
+  END AS Delivery
+FROM Orders
+
+// Вывести список стран, которые поставляют морепродукты
+
+SELECT DISTINCT Suppliers.Country,
+       Categories.CategoryName
+FROM Suppliers
+JOIN Products ON Suppliers.SupplierID=Products.SupplierID
+JOIN Categories ON Products.CategoryID = Categories.CategoryID
+WHERE
+	Categories.CategoryName='Seafood'
+  
+  
+ // Очистить поле ContactName у всех клиентов не из China
+ 
+ UPDATE Customers
+SET ContactName = NULL
+WHERE Country <> 'China';
+
+
+
+
