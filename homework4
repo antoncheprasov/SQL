@@ -1,0 +1,25 @@
+-- Наполнить произвольными данными таблицы streams, reactions, donations
+INSERT INTO reactions(reaction_id, created_at, author_id, stream_id, value)
+VALUES (3, current_timestamp(), 1, 899, 334),
+       (34, current_timestamp(), 2, 823, 12),
+       (65, current_timestamp(), 3, 49, 5),
+       (6677, current_timestamp(), 4, 2, 3134),
+       (77, current_timestamp(), 5, 9, 344);
+
+INSERT INTO streams(stream_id, created_at, author_id, title, is_completed)
+VALUES (3, current_timestamp(), 1, "final match", true),
+       (34, current_timestamp(), 2, "cooking with boris", true),
+       (65, current_timestamp(), 3, "minecraft", true),
+       (6677, current_timestamp(), 4, "kitties playing", false),
+       (77, current_timestamp(), 5, "new year live", true);
+
+-- Вывести информацию по стримам (проекция: имяавтора, названиестрима)
+SELECT users.username, streams.title
+FROM streams
+JOIN users ON streams.author_id=users.user_id
+
+-- Вывести список пожертвований в порядке убывания размера (проекция: размерпожертвования, имядонатара, название_стрима)
+SELECT donations.amount, users.username, streams.title
+FROM donations
+JOIN users ON donations.donator_id=users.user_id
+JOIN streams ON donations.stream_id=streams.stream_id
