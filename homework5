@@ -1,0 +1,41 @@
+-- Вывести информацию о трех самых дорогих товарах не из China (проекция: названиетовара, ценатоваравusd, названиепоставщика, странапоставщика)
+SELECT  Products.ProductName,
+    	Products.Price*.92 AS Price_USD,
+    	Suppliers.SupplierName,
+      Country
+FROM Products
+JOIN Suppliers ON Products.SupplierID=Suppliers.SupplierID
+WHERE Country != 'China'
+ORDER BY Price_USD DESC
+LIMIT 3
+
+-- Вывести страны клиентов и поставщиков (за исключением USA)
+SELECT Country
+FROM Customers
+WHERE Country != 'USA'
+UNION
+SELECT Country
+FROM Suppliers
+WHERE Country != 'USA';
+
+-- Вывести названия проданных товаров
+SELECT DISTINCT ProductName 
+FROM [OrderDetails]
+  inner join Products using(ProductID);
+
+-- С помощью DDL создайте таблицу "комментарии юзеров к видео"
+CREATE TABLE comments (
+  comment_id int,
+  content varchar(256),
+  stream_id int,
+  author_id int, 
+  created_at timestamp
+  )
+
+-- Вывести три последних комментария, включая имена авторов и названия видео
+SELECT content, username, title as stream_title
+FROM comments 
+  inner join users using(user_id)
+  inner join streams using(stream_id)
+order by created_at desc
+limit 3;
