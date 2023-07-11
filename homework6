@@ -1,0 +1,55 @@
+-- Вывести ко-во поставщиков не из UK и не из China
+SELECT COUNT(*) AS numberOfSuppliers
+FROM Suppliers
+WHERE Country NOT IN ('UK', 'China');
+
+-- Вывести среднюю/MAX/MIN стоимости и ко-во товаров из категорий 3 и 5
+SELECT 
+AVG(Price) AS avgPrice, 
+COUNT(*) AS totalProds
+FROM Products
+WHERE CategoryID IN (3, 5);
+
+SELECT 
+MIN(Price) AS minPrice, 
+COUNT(*) AS totalProds
+FROM Products
+WHERE CategoryID IN (3, 5);
+
+SELECT 
+MAX(Price) AS maxPrice, 
+COUNT(*) AS totalProds
+FROM Products
+WHERE CategoryID IN (3, 5);
+
+-- Вывести общую сумму проданных товаров
+SELECT
+	SUM(products.Price * order_details.Quantity) AS totalSold
+FROM order_details
+JOIN products ON order_details.ProductID=products.ProductID
+
+-- Вывести ко-во стран, которые поставляют напитки
+SELECT distinct
+COUNT(suppliers.Country) AS totalCountry
+FROM suppliers
+JOIN products ON products.SupplierID=suppliers.SupplierID
+JOIN categories ON products.CategoryID=categories.CategoryID
+WHERE
+	categories.CategoryName='Beverages'
+
+-- Вывести сумму, на которую было отправлено товаров клиентам в USA
+SELECT
+	SUM(products.Price * order_details.Quantity) AS totalSoldtoUSA
+FROM order_details
+
+JOIN products ON products.ProductID=order_details.ProductID
+JOIN orders ON orders.OrderID=order_details.OrderID
+JOIN customers ON customers.CustomerID=orders.CustomerID
+
+WHERE customers.Country='USA'
+
+
+
+
+
+  
