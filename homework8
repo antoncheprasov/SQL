@@ -1,0 +1,35 @@
+-- 1. https://dbdiagram.io/d/64d4b1ba02bd1c4a5e8ebe60
+
+-- 2. Вывести три самых продаваемых товара
+SELECT ProductName, COUNT(*) AS most_orders
+FROM OrderDetails
+JOIN Products USING(ProductID)
+Group By ProductID
+ORDER BY most_orders DESC
+LIMIT 3
+
+-- 3. Очистить почтовый индекс у всех клиентов не из China
+UPDATE Customers
+SET PostalCode=NULL
+WHERE Country!="China"
+
+-- 4. Вывести данные о поставщике, который находится на четвертом месте по ко-ву поставленных товаров
+SELECT SupplierName, COUNT(ProductID) AS total_shipped
+FROM Suppliers
+JOIN Products USING(SupplierID)
+GROUP BY SupplierID
+ORDER BY total_shipped DESC
+LIMIT 1 OFFSET 3
+
+-- 5. Вывести среднюю стоимость заказа
+SELECT OrderID, AVG(Price*Quantity) AS average_price
+FROM OrderDetails
+JOIN Products USING(ProductID)
+GROUP BY OrderID
+ORDER BY average_price DESC
+
+-- 6. Вывести заказы со скидочной ценой (скидка 15%)
+SELECT OrderID, ROUND(Price*Quantity*0.85) AS discount_price
+FROM OrderDetails
+JOIN Products USING(ProductID)
+GROUP BY OrderID
