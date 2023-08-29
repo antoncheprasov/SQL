@@ -1,0 +1,25 @@
+-- Write a query to display the first day of the month (in datetime format) three months before the current month.
+SELECT DATE(
+    DATE_FORMAT(
+      DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH),
+      "%Y-%m-01"
+    )
+  );
+
+or
+
+-- @block
+SELECT CURRENT_DATE() - INTERVAL 3 MONTH - INTERVAL (DAY(CURRENT_DATE) - 1) DAY;
+
+SELECT *
+FROM Products
+WHERE ProductId NOT IN (SELECT ProductId FROM OrderDetails)
+
+SELECT *
+FROM Products LEFT JOIN OrderDetails using (ProductId)
+WHERE OrderID is Null;
+
+-- write a SQL query to find the actors who played a role in the movie 'Annie Hall'. Return all the fields of actor table.
+SELECT * 
+FROM actor 
+WHERE act_id IN(SELECT act_id FROM movie_cast WHERE mov_id IN (SELECT mov_id FROM movie WHERE mov_title='Annie Hall'));
