@@ -8,10 +8,9 @@ CREATE TABLE IF NOT EXISTS videos (
 );
 
 -- Вывести товары, которые не были ни разу заказы (с помощью подзапросов)
-SELECT ProductName,
+SELECT *,
 FROM Products
-LEFT JOIN OrderDetails USING (ProductID)
-WHERE OrderID IS NULL
+WHERE ProductID NOT IN (SELECT ProductID FROM OrderDetails)
 
 -- Вывести заказы, сделанные с 1 мая 2022 по 20 мая 2022 (в рамках новой БД, сделанной в "супер-песочнице")
 SELECT *
