@@ -1,0 +1,22 @@
+-- Описать таблицу videos с исп. механизма Constraints (поля: id, название, продолжительность, статусопубликования, датавремя_добавления)
+CREATE TABLE IF NOT EXISTS videos (
+	id int primary key auto_increment,
+	title varchar(255) not null,
+	length int not null check(length > 0 sec),
+	is_published boolean,
+	added_at timestamp not null
+);
+
+-- Вывести товары, которые не были ни разу заказы (с помощью подзапросов)
+SELECT ProductName,
+FROM Products
+LEFT JOIN OrderDetails USING (ProductID)
+WHERE OrderID IS NULL
+
+-- Вывести заказы, сделанные с 1 мая 2022 по 20 мая 2022 (в рамках новой БД, сделанной в "супер-песочнице")
+SELECT *
+FROM Orders
+WHERE OrderDate BETWEEN '2022-05-01' AND '2022-05-20'
+
+-- Описать схему БД "онлайн-тестирование" с помощью инструмента онлайн-проектирования БД. Необходимо предусмотреть регистрацию пользователя и выбор им тем для прохождения тестирования.
+https://dbdiagram.io/d/64ef8ea302bd1c4a5eb2d270
