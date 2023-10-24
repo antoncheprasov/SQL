@@ -1,0 +1,41 @@
+-- Вывести три случайных трека продолжительностью до 30 мин
+db.tracks.aggregate([
+    {$match: {duration_secs: {$lte: 60 * 30}}},
+    { $sample: { size: 3 } }
+])
+
+-- Вывести реакции на треки с оценкой больше 3 (проекция должна содержать имя автора реакции и название трека)
+db.reactions.aggregate([
+  {$match: {value: {$gt: 3}}},
+      {$lookup:{
+          from: 'users',
+          localField: 'author_id',
+          foreignField: '_id',
+          as: 'author'
+      }},
+        { $unwind: '$author' },
+        {$lookup:{
+          from: 'tracks',
+          localField: 'track_id',
+          foreignField: '_id',
+          as: 'track'
+      }},
+        { $unwind: '$track' },
+        {$project:{ _id:0, author_fullname: '$author.fullname', track_title: '$track.title' }
+        }
+ ])
+
+ -- Вывести юзера, у которого больше всего треков (проекция должна содержать имя юзера)
+ db.tracks.aggregate([
+ {$group: {_id: '$author_id', total_tracks: { $sum: '_id'}}
+ },
+ { $lookup: { from: 'users',
+             localField: 'author_id',
+             foreignField: 'track_id',
+             as: 'author'}
+ },
+         {$unwind: '$author' },
+         {$sort: {total_tracks: -1}},
+         {$limit: 1},
+         {$project:{_id:0, author_fullname: '$author.fullname'} }
+ ])
